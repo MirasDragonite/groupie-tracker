@@ -1,0 +1,144 @@
+
+body{
+  background: #262626;
+margin: 0;
+}
+
+.MiddleHalf {
+  
+    
+
+  margin-bottom: 20px;
+background: #262626;
+margin: 0;
+padding-top: 50px;
+padding-left: 100px;
+padding-right: 100px;
+display: flex;
+
+}
+
+
+
+.Name,
+.Date,
+.Album,
+.Members,
+.Location {
+  color: white;
+}
+
+.Name{
+  margin: 0;
+ color: #E6E6E6;
+font-family: Inter;
+font-size: 40px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+.Date{
+  margin: 0;
+  color: #D4AF66;
+font-family: Inter;
+font-size: 24px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+.Album{
+  margin: 1;
+  color: #C2C2C2;
+font-family: Inter;
+font-size: 15px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+.Members{
+  color: #D4AF66;
+font-feature-settings: 'cpsp' on;
+font-family: Inter;
+font-size: 15px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+    padding-left: 10px;
+}
+
+.Helper{
+  color: #FFF;
+font-family: Inter;
+font-size: 15px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+.Location{
+  color: #C2C2C2;
+
+font-family: Inter;
+font-size: 15px;
+font-style: normal;
+font-weight: 700;
+line-height: 17.5px; /* 116.667% */
+}
+
+.Dates{
+  color: #E3E3E3;
+font-family: Inter;
+font-size: 12px;
+font-style: normal;
+font-weight: 700;
+line-height: 17.5px;
+}
+
+.secondHalf{
+  padding-left: 30px; 
+  align-content: baseline;
+  display: flex;
+  justify-content: space-between;
+  width: 100vw;
+}
+
+
+@media (max-width:1020px) {
+  .secondHalf{
+  
+    display: block;
+  }  
+}
+
+
+
+@media (max-width:702px) {
+  .secondHalf{
+  
+    display: block;
+  } 
+  
+  .Name{
+    font-size: 30px;
+  }
+  .Date{
+    font-size: 18px;
+  }
+}
+
+
+@media (max-width:600px) {
+  .MiddleHalf{
+    display: block;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    padding-top: 20px;
+  }
+  .secondHalf{
+    padding: 0;
+  }
+}

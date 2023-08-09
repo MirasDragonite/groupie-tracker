@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Artists</title>
+<link rel="stylesheet" href='/static/css/artist.css'>
+</head>
+<body>
+  <section class="MiddleHalf"> 
+ 
+   
+    <div calss="firstHalf"> 
+      
+      <img src="{{.Artist.Image}}" alt="">
+    
+      <p class="Helper">Members:</p>
+      {{range .Artist.Members}}
+      <p class="Members">{{.}}</p>
+      
+        {{end}}
+
+      
+    </div>
+
+    <div class="secondHalf"> 
+   <div class="firstPartFromSecondHalf">
+    <p class="Name"> {{.Artist.Name}}</p>
+    <p class="Date">Creation date: {{.Artist.CreationDate}}</p>
+    <p class="Album">First album: {{.Artist.FirstAlbum}}</p>
+    
+
+           
+
+   </div>
+
+
+
+ <div class="secondPartFromSecondHalf">
+
+  {{range $location, $date := .LocADate.DatesLocations}}
+  <p class="Location"> Location:{{$location}}</p>
+  {{range $date}}
+  <li class="Dates">Date:{{.}}</li>
+  {{end}}
+  
+    {{end}}
+ </div>
+</div>
+  </section>
+
+
+</body>
+
+
+
+</html>
