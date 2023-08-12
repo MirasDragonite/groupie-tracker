@@ -1,0 +1,24 @@
+body {
+    background-color: #272b33;
+}
+.preBack {
+    text-align: center;
+    font-size: 36vh;
+    font-weight: 600;
+    color: #D4AF66;
+}
+@media (max-width: 1524px) {
+    .preBack {
+        font-size: 26vh;
+    }
+}
+@media (max-width: 1024px) {
+    .preBack {
+        font-size: 18vh;
+    }
+}
+@media (max-width: 786px) {
+    .preBack {
+        font-size: 12vh;
+    }
+}

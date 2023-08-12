@@ -63,7 +63,7 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 	}
 
 	artisId := r.URL.Path[len("/artist/"):]
-	if artisId[0] == '0' {
+	if artisId == "" || artisId[0] == '0' {
 		errorHandler(w, r, http.StatusBadRequest)
 		return
 	}

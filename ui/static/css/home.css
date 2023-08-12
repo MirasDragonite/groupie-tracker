@@ -9,7 +9,9 @@ padding-top: 50px;
 padding-left: 100px;
 padding-right: 100px;
 }
-
+.card-title{
+  text-decoration: none;
+}
 body{
 margin: 0;
 }
