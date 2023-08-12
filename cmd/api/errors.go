@@ -6,66 +6,34 @@ import (
 )
 
 const (
-	err400          = "400"
-	err404          = "404"
-	err405          = "405"
-	err500          = "500"
 	pathToErrorPage = "./ui/html/error.html"
 )
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
+	w.WriteHeader(status)
+	errs := "404"
 	switch status {
-	case http.StatusNotFound:
-		w.WriteHeader(http.StatusNotFound)
-		page, err := template.ParseFiles(pathToErrorPage)
-		if err != nil {
-			errorHandler(w, r, http.StatusInternalServerError)
-			return
-		}
-		err = page.Execute(w, err404)
-		if err != nil {
-			errorHandler(w, r, http.StatusInternalServerError)
-			return
-		}
-		return
-	case http.StatusBadRequest:
-		w.WriteHeader(http.StatusBadRequest)
-		page, err := template.ParseFiles(pathToErrorPage)
-		if err != nil {
-			errorHandler(w, r, http.StatusInternalServerError)
-			return
-		}
-		err = page.Execute(w, err400)
-		if err != nil {
-			errorHandler(w, r, http.StatusInternalServerError)
-			return
-		}
-		return
-	case http.StatusInternalServerError:
+	case 400:
+		errs = "400"
+	case 404:
+		errs = "404"
+	case 405:
+		errs = "405"
+	case 500:
+		errs = "500"
+	}
+
+	page, err := template.ParseFiles(pathToErrorPage)
+	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		page, err := template.ParseFiles(pathToErrorPage)
-		if err != nil {
-			w.Write([]byte("Internal server error"))
-			return
-		}
-		err = page.Execute(w, err500)
-		if err != nil {
-			errorHandler(w, r, http.StatusInternalServerError)
-			return
-		}
-		return
-	case http.StatusMethodNotAllowed:
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		page, err := template.ParseFiles(pathToErrorPage)
-		if err != nil {
-			errorHandler(w, r, http.StatusInternalServerError)
-			return
-		}
-		err = page.Execute(w, err405)
-		if err != nil {
-			errorHandler(w, r, http.StatusInternalServerError)
-			return
-		}
+		w.Write([]byte("Internal Server Error"))
 		return
 	}
+	err = page.Execute(w, errs)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Internal Server Error"))
+		return
+	}
+	return
 }
