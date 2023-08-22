@@ -9,7 +9,7 @@ const (
 	pathToErrorPage = "./ui/html/error.html"
 )
 
-func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
+func errorHandler(w http.ResponseWriter, status int) {
 	w.WriteHeader(status)
 	errs := "404"
 	switch status {

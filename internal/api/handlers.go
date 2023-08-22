@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"groupie-tracker/internal/data"
+	"groupie-tracker/internal/pkg"
 )
 
 func Start() {
@@ -17,7 +18,7 @@ func Start() {
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("/artist/", getArtist)
 
-	fmt.Printf("Server loading in port%v\n", host)
+	fmt.Printf("Server loading in http://localhost%v/\n", host)
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
@@ -31,46 +32,64 @@ func Start() {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		errorHandler(w, r, http.StatusNotFound)
-		return
-	}
-
 	if r.URL.Path != "/" {
-		errorHandler(w, r, http.StatusNotFound)
+		errorHandler(w, http.StatusNotFound)
 		return
 	}
-	artists := data.GetArtists()
+	search := data.GetArtists()
 
 	tmp, err := template.ParseFiles("./ui/html/home.html")
 	if err != nil {
-		errorHandler(w, r, http.StatusInternalServerError)
+		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
+	if r.Method == http.MethodGet {
+		// get full page with artists
+		ans := map[string]interface{}{
+			"Artists": search,
+			"Search":  search,
+		}
+		err = tmp.Execute(w, ans)
 
-	err = tmp.Execute(w, artists)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	} else if r.Method == http.MethodPost {
+		// searching
+		datas := r.FormValue("searchInput")
 
-	if err != nil {
-		fmt.Println(err)
-		return
+		result := pkg.Search(datas)
+		locations := data.GetLocations().Index
+
+		ans := map[string]interface{}{
+			"Search":    search,
+			"Artists":   result,
+			"Locations": locations,
+		}
+		err = tmp.Execute(w, ans)
+		if err != nil {
+			errorHandler(w, http.StatusInternalServerError)
+			return
+		}
 	}
 }
 
 func getArtist(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		errorHandler(w, r, http.StatusNotFound)
+		errorHandler(w, http.StatusNotFound)
 		return
 	}
 
 	artisId := r.URL.Path[len("/artist/"):]
 	if artisId == "" || artisId[0] == '0' {
-		errorHandler(w, r, http.StatusBadRequest)
+		errorHandler(w, http.StatusBadRequest)
 		return
 	}
 
 	id, err := strconv.Atoi(artisId)
 	if err != nil {
-		errorHandler(w, r, http.StatusBadRequest)
+		errorHandler(w, http.StatusBadRequest)
 		return
 	}
 
@@ -78,13 +97,13 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 	artist, locADate, err := data.GetData(id)
 	if err != nil {
 		fmt.Println("Stupid")
-		errorHandler(w, r, http.StatusBadRequest)
+		errorHandler(w, http.StatusBadRequest)
 		return
 	}
 
 	tmp, err := template.ParseFiles("./ui/html/artist-page.html")
 	if err != nil {
-		errorHandler(w, r, http.StatusInternalServerError)
+		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	ans := map[string]interface{}{
