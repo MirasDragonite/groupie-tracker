@@ -12,7 +12,7 @@ import (
 )
 
 func Start() {
-	host := ":8000"
+	host := ":7000"
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", home)
@@ -93,8 +93,19 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// artist, location, date, err := data.GetArtistById(id)
 	artist, locADate, err := data.GetData(id)
+	if err != nil {
+		fmt.Println("Stupid")
+		errorHandler(w, http.StatusBadRequest)
+		return
+	}
+
+	location, err := data.GetLocationById(id)
+	coor := make([][]float64, 0)
+	for _, ch := range location {
+		coor = append(coor, data.GetCoordinates(ch))
+	}
+	fmt.Println("Stupid")
 	if err != nil {
 		fmt.Println("Stupid")
 		errorHandler(w, http.StatusBadRequest)
@@ -106,14 +117,21 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
+	fmt.Println(coor)
 	ans := map[string]interface{}{
 		"Artist":   artist,
 		"LocADate": locADate,
+		"Location": coor,
 	}
-	err = tmp.Execute(w, ans)
 
+	err = tmp.Execute(w, ans)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 }
+
+// func getLocation() {
+// 	accessToken := "pk.eyJ1IjoibW90b2JlIiwiYSI6ImNsbG0xdnQzYTJqZG8zZ21neTJuN28wemoifQ.U2Zp2USylpY-WQyXi8TYfw"
+
+// }

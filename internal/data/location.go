@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 )
@@ -29,4 +30,15 @@ func GetLocations() Index1 {
 		log.Fatal(err)
 	}
 	return index
+}
+
+func GetLocationById(id int) ([]string, error) {
+	err := errors.New("Wrong id")
+	locations := GetLocations()
+	for _, ch := range locations.Index {
+		if ch.ID == id {
+			return ch.Locations, nil
+		}
+	}
+	return nil, err
 }

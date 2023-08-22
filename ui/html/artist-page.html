@@ -3,6 +3,8 @@
 <head>
 <title>Artists</title>
 <link rel="stylesheet" href='/static/css/artist.css'>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css" rel="stylesheet" />
 </head>
 <body>
   <section class="MiddleHalf"> 
@@ -47,7 +49,26 @@
  </div>
 </div>
   </section>
+  <div id="map"  class="maps"></div>
 
+  <script>
+      mapboxgl.accessToken = 'pk.eyJ1IjoibW90b2JlIiwiYSI6ImNsbG0xdnQzYTJqZG8zZ21neTJuN28wemoifQ.U2Zp2USylpY-WQyXi8TYfw';
+    "{{with index .Location 0}}"
+      var map = new mapboxgl.Map({
+          container: 'map',
+          style: 'mapbox://styles/mapbox/streets-v11', // Choose the map style
+          center: ["{{index . 0}}","{{index . 1}}"], // Coordinates of the center of the map
+          zoom: 10// Initial zoom level
+      });
+"{{end}}"
+      // Add a marker at the specified coordinates
+      {{range .Location}}
+    new mapboxgl.Marker()
+          .setLngLat(["{{index . 0}}", "{{index . 1}}"])
+          .addTo(map);
+      {{end}}
+
+  </script>
 
 </body>
 
