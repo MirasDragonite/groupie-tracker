@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-const mapboxAPIURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/?country="
+const mapboxAPIURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/"
 
 type Feature struct {
 	ID string `json:"id"`

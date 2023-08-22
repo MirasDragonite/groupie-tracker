@@ -28,7 +28,13 @@ background-color: white;
 color:black;
 
 }
-
+.errText{
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding-top: 60px;
+  color:white;
+}
 .main_artist {
   height: 100vh;
   background-color: #272b33;
