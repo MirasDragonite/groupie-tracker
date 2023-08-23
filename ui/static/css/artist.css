@@ -104,10 +104,15 @@ line-height: 17.5px;
   justify-content: space-between;
   width: 100vw;
 }
+.mapPosition{
+padding: 30px
+}
 .maps{
   height: 800px;
   width: 100%;
+
 }
+
 
 @media (max-width:1020px) {
   .secondHalf{

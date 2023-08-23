@@ -12,7 +12,7 @@ import (
 )
 
 func Start() {
-	host := ":7000"
+	host := ":8000"
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", home)
@@ -131,7 +131,3 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// func getLocation() {
-// 	accessToken := "pk.eyJ1IjoibW90b2JlIiwiYSI6ImNsbG0xdnQzYTJqZG8zZ21neTJuN28wemoifQ.U2Zp2USylpY-WQyXi8TYfw"
-
-// }
