@@ -57,14 +57,19 @@ func home(w http.ResponseWriter, r *http.Request) {
 		}
 	} else if r.Method == http.MethodPost {
 		// searching
-		datas := r.FormValue("searchInput")
+		// datas := r.FormValue("searchInput")
+		minDate, _ := strconv.Atoi(r.FormValue("minValue"))
+		maxDate, _ := strconv.Atoi(r.FormValue("maxValue"))
 
-		result := pkg.Search(datas)
+		fmt.Println(minDate, maxDate)
+
+		// result := pkg.Search(datas)
+		filtered := pkg.Filter(minDate, maxDate)
 		locations := data.GetLocations().Index
 
 		ans := map[string]interface{}{
 			"Search":    search,
-			"Artists":   result,
+			"Artists":   filtered,
 			"Locations": locations,
 		}
 		err = tmp.Execute(w, ans)
@@ -95,7 +100,7 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 
 	artist, locADate, err := data.GetData(id)
 	if err != nil {
-		fmt.Println("Stupid")
+
 		errorHandler(w, http.StatusBadRequest)
 		return
 	}
@@ -105,9 +110,9 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 	for _, ch := range location {
 		coor = append(coor, data.GetCoordinates(ch))
 	}
-	fmt.Println("Stupid")
+
 	if err != nil {
-		fmt.Println("Stupid")
+
 		errorHandler(w, http.StatusBadRequest)
 		return
 	}
@@ -130,4 +135,3 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-

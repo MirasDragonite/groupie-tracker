@@ -65,8 +65,7 @@ color:#D4AF66;
 }
 
 .searchButton{
-  
-  width: 3%;
+
   border-radius: 20px;
 
 }
@@ -79,7 +78,15 @@ font-weight: 500;
   border-color: #262626;
 }
 
+.filter{
+  text-align: center;
+  margin: auto;
+  padding-bottom:  20px; 
+height: 30%;
+width: 70%;
+border-radius: 10px;
 
+}
 @media (max-width:460px){
 .Title{
  font-size: 37px;

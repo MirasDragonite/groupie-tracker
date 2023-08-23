@@ -37,6 +37,16 @@
     <button type="submit" class="searchButton" formaction="/"> <i class="fa fa-search"></i></button>
    </form>
   </div>
+  <form method="POST">
+    <div class="filter">
+      <input type="range" class="range-min" min="1965" max="2015" value="1999" step="1" name="maxValue">
+      <p>Max</p>
+      <input type="range" class="range-max" min="1965" max="2015" value="1976" step="1" name="minValue">
+      <p>Min</p>
+      <button type="submit" class="" formaction="/"> Hi</button>
+    </div>
+
+  </form>
     <div class="main_artist">
       <section class="artists" >
        {{if .Artists}}
@@ -76,4 +86,10 @@
 1024 laptop
 4k 2560 -->
 
+<!-- creation date:
+min 1965
+max 2015 -->
 
+<!-- first album
+min 1963
+max 2018 -->
