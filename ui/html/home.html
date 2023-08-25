@@ -39,11 +39,51 @@
   </div>
   <form method="POST">
     <div class="filter">
-      <input type="range" class="range-min" min="1965" max="2015" value="1999" step="1" name="maxValue">
-      <p>Max</p>
-      <input type="range" class="range-max" min="1965" max="2015" value="1976" step="1" name="minValue">
-      <p>Min</p>
-      <button type="submit" class="" formaction="/"> Hi</button>
+      <div class="filter_CD">
+        <input type="range" class="range-min" min="1965" max="2015" value="2015" step="1" name="maxValueCD">
+      <p>Max CD</p>
+      <input type="range" class="range-max" min="1965" max="2015" value="1965" step="1" name="minValueCD">
+      <p>Min CD</p>
+      </div>
+      <div class="filter_FA">
+        <input type="range" class="range-min" min="1963" max="2018" value="1990" step="1" name="maxValueFA">
+      <p>Max FA</p>
+      <input type="range" class="range-max" min="1963" max="2018" value="1980" step="1" name="minValueFA">
+      <p>Min FA</p>
+      </div>
+      
+      <div>
+       
+    
+          <input type="checkbox" class="radio" value="1" name="member1" />1
+        
+          <input type="checkbox" class="radio" value="2" name="member2" />2
+       
+          <input type="checkbox" class="radio" value="3"  name="member3" />3
+          <input type="checkbox" class="radio" value="4"  name="member4" />4
+          <input type="checkbox" class="radio" value="5" name="member5" />5
+          <input type="checkbox" class="radio" value="6" name="member6" />6
+          <input type="checkbox" class="radio" value="7" name="member7" />7
+          <input type="checkbox" class="radio" value="8" name="member8" />8
+          
+      </div>
+
+
+<select name="locationFromFilter">
+  <option value="none"> Everywhere</option>
+{{range .Filters}}
+
+{{range $location, $date := .DatesLocations}}
+<option value="{{$location}}" >{{$location}}</option>
+{{end}}
+{{end}}
+</select>
+
+
+
+      <button type="submit" class="" formaction="/filtered"> Hi</button>
+
+      
     </div>
 
   </form>

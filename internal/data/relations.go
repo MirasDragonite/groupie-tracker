@@ -21,7 +21,7 @@ type Index struct {
 	Items []IndexItem `json:"index"`
 }
 
-func getLocationsAndDates() Index {
+func GetLocationsAndDates() Index {
 	jsonData, err := http.Get("https://groupietrackers.herokuapp.com/api/relation")
 	if err != nil {
 		log.Fatal(err)

@@ -16,7 +16,6 @@ type Artist struct {
 	FirstAlbum   string   `json:"firstAlbum"`
 	Locations    string   `json:"locations"`
 	ConcertDates string   `json:"concertDates"`
-	Relations    string   `json:"relations"`
 }
 
 func GetArtists() []Artist {
@@ -40,7 +39,7 @@ func GetData(id int) (Artist, IndexItem, error) {
 	var empty2 IndexItem
 	err := errors.New("Wrong number")
 	artists := GetArtists()
-	locADate := getLocationsAndDates()
+	locADate := GetLocationsAndDates()
 
 	for _, ch := range artists {
 		for _, el := range locADate.Items {

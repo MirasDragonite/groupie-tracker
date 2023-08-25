@@ -17,6 +17,7 @@ func Start() {
 
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("/artist/", getArtist)
+	mux.HandleFunc("/filtered", filter)
 
 	fmt.Printf("Server loading in http://localhost%v/\n", host)
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
@@ -37,6 +38,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	search := data.GetArtists()
+	locAndDate := data.GetLocationsAndDates()
 
 	tmp, err := template.ParseFiles("./ui/html/home.html")
 	if err != nil {
@@ -48,6 +50,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		ans := map[string]interface{}{
 			"Artists": search,
 			"Search":  search,
+			"Filters": locAndDate.Items,
 		}
 		err = tmp.Execute(w, ans)
 
@@ -58,19 +61,16 @@ func home(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == http.MethodPost {
 		// searching
 		datas := r.FormValue("searchInput")
-		// minDate, _ := strconv.Atoi(r.FormValue("minValue"))
-		// maxDate, _ := strconv.Atoi(r.FormValue("maxValue"))
-
-		// fmt.Println(minDate, maxDate)
 
 		result := pkg.Search(datas)
-		// filtered := pkg.Filter(minDate, maxDate)
+
 		locations := data.GetLocations().Index
 
 		ans := map[string]interface{}{
 			"Search":    search,
 			"Artists":   result,
 			"Locations": locations,
+			"Filters":   locAndDate.Items,
 		}
 		err = tmp.Execute(w, ans)
 		if err != nil {
@@ -132,6 +132,59 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 	err = tmp.Execute(w, ans)
 	if err != nil {
 		fmt.Println(err)
+		return
+	}
+}
+
+func filter(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		errorHandler(w, http.StatusMethodNotAllowed)
+		return
+	}
+
+	if r.URL.Path != "/filtered" {
+		errorHandler(w, http.StatusNotFound)
+		return
+	}
+	locAndDate := data.GetLocationsAndDates()
+
+	search := data.GetArtists()
+	locations := data.GetLocations().Index
+	minCD, _ := strconv.Atoi(r.FormValue("minValueCD"))
+	maXCD, _ := strconv.Atoi(r.FormValue("maxValueCD"))
+	minFA, _ := strconv.Atoi(r.FormValue("minValueFA"))
+	maxFA, _ := strconv.Atoi(r.FormValue("maxValueFA"))
+	n1, _ := strconv.Atoi(r.FormValue("member1"))
+	n2, _ := strconv.Atoi(r.FormValue("member2"))
+	n3, _ := strconv.Atoi(r.FormValue("member3"))
+	n4, _ := strconv.Atoi(r.FormValue("member4"))
+	n5, _ := strconv.Atoi(r.FormValue("member5"))
+	n6, _ := strconv.Atoi(r.FormValue("member6"))
+	n7, _ := strconv.Atoi(r.FormValue("member7"))
+	n8, _ := strconv.Atoi(r.FormValue("member8"))
+	numberOfMembers := make([]int, 0)
+	numberOfMembers = pkg.AddToSlice(numberOfMembers, n1, n2, n3, n4, n5, n6, n7, n8)
+
+	locationFromFilter := r.FormValue("locationFromFilter")
+	fmt.Println(numberOfMembers)
+	filtered := pkg.Filter(minCD, maXCD, minFA, maxFA, locationFromFilter, numberOfMembers)
+
+	tmp, err := template.ParseFiles("./ui/html/home.html")
+	if err != nil {
+		errorHandler(w, http.StatusInternalServerError)
+		return
+	}
+
+	ans := map[string]interface{}{
+		"Search":    search,
+		"Artists":   filtered,
+		"Locations": locations,
+		"Filters":   locAndDate.Items,
+	}
+
+	err = tmp.Execute(w, ans)
+	if err != nil {
+		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
 }
