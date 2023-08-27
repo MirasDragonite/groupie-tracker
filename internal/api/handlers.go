@@ -45,6 +45,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
+
 	if r.Method == http.MethodGet {
 		// get full page with artists
 		ans := map[string]interface{}{
@@ -61,9 +62,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == http.MethodPost {
 		// searching
 		datas := r.FormValue("searchInput")
-
 		result := pkg.Search(datas)
-
 		locations := data.GetLocations().Index
 
 		ans := map[string]interface{}{
@@ -77,12 +76,15 @@ func home(w http.ResponseWriter, r *http.Request) {
 			errorHandler(w, http.StatusInternalServerError)
 			return
 		}
+	} else {
+		errorHandler(w, http.StatusMethodNotAllowed)
+		return
 	}
 }
 
 func getArtist(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		errorHandler(w, http.StatusNotFound)
+		errorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -100,19 +102,14 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 
 	artist, locADate, err := data.GetData(id)
 	if err != nil {
-
 		errorHandler(w, http.StatusBadRequest)
 		return
 	}
 
 	location, err := data.GetLocationById(id)
-	coor := make([][]float64, 0)
-	for _, ch := range location {
-		coor = append(coor, data.GetCoordinates(ch))
-	}
 
+	coor := data.GetCoordinatesBatch(location)
 	if err != nil {
-
 		errorHandler(w, http.StatusBadRequest)
 		return
 	}
@@ -122,7 +119,7 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 		errorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(coor)
+	// fmt.Println(coor)
 	ans := map[string]interface{}{
 		"Artist":   artist,
 		"LocADate": locADate,
@@ -146,22 +143,26 @@ func filter(w http.ResponseWriter, r *http.Request) {
 		errorHandler(w, http.StatusNotFound)
 		return
 	}
-	locAndDate := data.GetLocationsAndDates()
 
+	locAndDate := data.GetLocationsAndDates()
 	search := data.GetArtists()
 	locations := data.GetLocations().Index
-	minCD, _ := strconv.Atoi(r.FormValue("minValueCD"))
-	maXCD, _ := strconv.Atoi(r.FormValue("maxValueCD"))
-	minFA, _ := strconv.Atoi(r.FormValue("minValueFA"))
-	maxFA, _ := strconv.Atoi(r.FormValue("maxValueFA"))
-	n1, _ := strconv.Atoi(r.FormValue("member1"))
-	n2, _ := strconv.Atoi(r.FormValue("member2"))
-	n3, _ := strconv.Atoi(r.FormValue("member3"))
-	n4, _ := strconv.Atoi(r.FormValue("member4"))
-	n5, _ := strconv.Atoi(r.FormValue("member5"))
-	n6, _ := strconv.Atoi(r.FormValue("member6"))
-	n7, _ := strconv.Atoi(r.FormValue("member7"))
-	n8, _ := strconv.Atoi(r.FormValue("member8"))
+	minCD, err := strconv.Atoi(r.FormValue("minValueCD"))
+	maXCD, err := strconv.Atoi(r.FormValue("maxValueCD"))
+	minFA, err := strconv.Atoi(r.FormValue("minValueFA"))
+	maxFA, err := strconv.Atoi(r.FormValue("maxValueFA"))
+	n1, err := strconv.Atoi(r.FormValue("member1"))
+	n2, err := strconv.Atoi(r.FormValue("member2"))
+	n3, err := strconv.Atoi(r.FormValue("member3"))
+	n4, err := strconv.Atoi(r.FormValue("member4"))
+	n5, err := strconv.Atoi(r.FormValue("member5"))
+	n6, err := strconv.Atoi(r.FormValue("member6"))
+	n7, err := strconv.Atoi(r.FormValue("member7"))
+	n8, err := strconv.Atoi(r.FormValue("member8"))
+	if err != nil {
+		errorHandler(w, http.StatusBadRequest)
+		return
+	}
 	numberOfMembers := make([]int, 0)
 	numberOfMembers = pkg.AddToSlice(numberOfMembers, n1, n2, n3, n4, n5, n6, n7, n8)
 

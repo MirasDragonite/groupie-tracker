@@ -5,42 +5,76 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sync"
 )
 
-const mapboxAPIURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/"
+const mapboxAPIURL = "https://maps.googleapis.com/maps/api/geocode/"
 
-type Feature struct {
-	ID string `json:"id"`
-
-	Center []float64 `json:"center"`
+// https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY
+type Locations struct {
+	Lat float64 `json:"lat"`
+	Lng float64 `json:"lng"`
 }
 
-type FeatureCollection struct {
-	Features []Feature `json:"features"`
+type Geometry struct {
+	Locations Locations `json:"location"`
 }
 
-func GetCoordinates(location string) []float64 {
-	// fmt.Println(location)
-	apiKey := "pk.eyJ1IjoibW90b2JlIiwiYSI6ImNsbG0xdnQzYTJqZG8zZ21neTJuN28wemoifQ.U2Zp2USylpY-WQyXi8TYfw"
+type Result struct {
+	Geometry Geometry `json:"geometry"`
+}
+
+type GeocodeResponse struct {
+	Results []Result `json:"results"`
+}
+
+func GetCoordinates(location, apiKey string) []float64 {
 	result := make([]float64, 2)
-	// Create the URL for the API request
-	url := fmt.Sprintf("%s%s.json?access_token=%s", mapboxAPIURL, location, apiKey)
+
+	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s", location, apiKey)
 	// fmt.Println(url)
-	// Make the HTTP GET request
 	response, err := http.Get(url)
 	if err != nil {
 		fmt.Println("Error making request:", err)
 		return result
 	}
-	var coordinate FeatureCollection
-	err = json.NewDecoder(response.Body).Decode(&coordinate)
+	defer response.Body.Close()
 
+	var geocodeResponse GeocodeResponse
+	err = json.NewDecoder(response.Body).Decode(&geocodeResponse)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	result[0] = float64(coordinate.Features[1].Center[0])
-	result[1] = float64(coordinate.Features[1].Center[1])
+	result[1] = geocodeResponse.Results[0].Geometry.Locations.Lat
+	result[0] = geocodeResponse.Results[0].Geometry.Locations.Lng
 
 	return result
+}
+
+func GetCoordinatesBatch(locations []string) [][]float64 {
+	apiKey := "AIzaSyBXH2PYMwKrL18rjTE-O5OdtEgUZywoIgo"
+	coordinateCh := make(chan []float64, len(locations))
+	var wg sync.WaitGroup
+
+	for _, location := range locations {
+		wg.Add(1)
+		go func(loc string) {
+			defer wg.Done()
+			coordinates := GetCoordinates(loc, apiKey)
+			coordinateCh <- coordinates
+		}(location)
+	}
+
+	go func() {
+		wg.Wait()
+		close(coordinateCh)
+	}()
+
+	var coor [][]float64
+	for coords := range coordinateCh {
+		coor = append(coor, coords)
+	}
+
+	return coor
 }
