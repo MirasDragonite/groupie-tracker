@@ -29,7 +29,9 @@ background-color: white;
 color:black;
 
 }
-
+.Img:hover{
+  box-shadow: 0px 0px 10px #ffffff;
+}
 .errText{
   margin-left: auto;
   margin-right: auto;
@@ -51,12 +53,19 @@ h2{
  
     
 }
-
+.title{
+  color:#D4AF66;
+}
+.title:hover{
+  color:#d4af66c0;
+}
 .Title{
 font-size: 60px;
 color:#D4AF66;
 }
-
+.Title:hover{
+  color:#d4af66e9;
+}
 .search-bar{
  text-align: center;
   margin: auto;

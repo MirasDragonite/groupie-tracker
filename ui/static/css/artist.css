@@ -27,7 +27,9 @@ display: flex;
 .Location {
   color: white;
 }
-
+.Img:hover{
+  box-shadow: 0px 0px 10px #ffffff;
+}
 .Name{
   margin: 0;
  color: #E6E6E6;
@@ -37,7 +39,9 @@ font-style: normal;
 font-weight: 700;
 line-height: normal;
 }
-
+.Name:hover{
+  color: #e6e6e6d8;;
+}
 .Date{
   margin: 0;
   color: #D4AF66;
@@ -47,7 +51,9 @@ font-style: normal;
 font-weight: 700;
 line-height: normal;
 }
-
+.Date:hover{
+  color: #d4af66dc;
+}
 .Album{
   margin: 1;
   color: #C2C2C2;
@@ -57,7 +63,9 @@ font-style: normal;
 font-weight: 700;
 line-height: normal;
 }
-
+.Album:hover{
+  color: #c2c2c2da;;
+}
 .Members{
   color: #D4AF66;
 font-feature-settings: 'cpsp' on;
@@ -68,16 +76,20 @@ font-weight: 700;
 line-height: normal;
     padding-left: 10px;
 }
-
+.Members:hover{
+  color: #d4af66c9;
+}
 .Helper{
-  color: #FFF;
+ color: rgb(255, 255, 255);
 font-family: Inter;
 font-size: 15px;
 font-style: normal;
 font-weight: 700;
 line-height: normal;
 }
-
+.Helper:hover{
+color: rgba(255, 255, 255, 0.831);;
+}
 .Location{
   color: #C2C2C2;
 
@@ -86,6 +98,9 @@ font-size: 15px;
 font-style: normal;
 font-weight: 700;
 line-height: 17.5px; /* 116.667% */
+}
+.Location:hover{
+  color: #c2c2c2ca;
 }
 
 .Dates{
@@ -96,7 +111,9 @@ font-style: normal;
 font-weight: 700;
 line-height: 17.5px;
 }
-
+.Dates:hover{
+  color: #e3e3e3cb;;
+}
 .secondHalf{
   padding-left: 30px; 
   align-content: baseline;

@@ -34,6 +34,7 @@
       
    
      </datalist> 
+  
     <button type="submit" class="searchButton" formaction="/"> <i class="fa fa-search"></i></button>
    </form>
   </div>
@@ -95,14 +96,16 @@
                    <div class="artist" style="background-color: #262626;">
                        
                        <a href="/artist/{{.Id}}" style="text-decoration: none; color:inherit;">
-                           <div class="card text-bg-dark">
-                               <img src="{{.Image}}" class="card-img" alt="...">
-                               <div class="card-img-overlay">
-                               
-                                 
-                               </div>
-                             </div>
-                             <h5 class="card-title" style="color:#D4AF66;" >{{.Name}}</h5>
+                          <div class="Img">
+                            <div class="card text-bg-dark">
+                              <img src="{{.Image}}" class="card-img" alt="...">
+                              <div class="card-img-overlay">
+                              
+                                
+                              </div>
+                            </div>
+                          </div>
+                             <h5 class="title" >{{.Name}}</h5>
                              
                </a>
                  
