@@ -25,15 +25,22 @@ func errorHandler(w http.ResponseWriter, status int) {
 
 	page, err := template.ParseFiles(pathToErrorPage)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+
 		w.Write([]byte("Internal Server Error"))
 		return
 	}
 	err = page.Execute(w, errs)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+
 		w.Write([]byte("Internal Server Error"))
 		return
 	}
 	return
+}
+
+func logError(w http.ResponseWriter, err error, num int) {
+	if err != nil {
+		errorHandler(w, num)
+		return
+	}
 }

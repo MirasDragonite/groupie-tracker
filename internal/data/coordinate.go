@@ -32,7 +32,7 @@ func GetCoordinates(location, apiKey string) []float64 {
 	result := make([]float64, 2)
 
 	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s", location, apiKey)
-	fmt.Println(url)
+
 	response, err := http.Get(url)
 	if err != nil {
 		fmt.Println("Error making request:", err)

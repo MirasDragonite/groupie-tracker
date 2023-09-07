@@ -41,10 +41,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	locAndDate := data.GetLocationsAndDates()
 
 	tmp, err := template.ParseFiles("./ui/html/home.html")
-	if err != nil {
-		errorHandler(w, http.StatusInternalServerError)
-		return
-	}
+	logError(w, err, http.StatusInternalServerError)
 
 	if r.Method == http.MethodGet {
 		// get full page with artists
@@ -54,14 +51,12 @@ func home(w http.ResponseWriter, r *http.Request) {
 			"Filters": locAndDate.Items,
 		}
 		err = tmp.Execute(w, ans)
+		logError(w, err, http.StatusInternalServerError)
 
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
 	} else if r.Method == http.MethodPost {
 		// searching
 		datas := r.FormValue("searchInput")
+
 		result := pkg.Search(datas)
 		locations := data.GetLocations().Index
 
@@ -72,13 +67,9 @@ func home(w http.ResponseWriter, r *http.Request) {
 			"Filters":   locAndDate.Items,
 		}
 		err = tmp.Execute(w, ans)
-		if err != nil {
-			errorHandler(w, http.StatusInternalServerError)
-			return
-		}
+		logError(w, err, http.StatusInternalServerError)
 	} else {
-		errorHandler(w, http.StatusMethodNotAllowed)
-		return
+		logError(w, err, http.StatusMethodNotAllowed)
 	}
 }
 
@@ -95,24 +86,13 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id, err := strconv.Atoi(artisId)
-	if err != nil {
-		errorHandler(w, http.StatusBadRequest)
-		return
-	}
-
+	logError(w, err, http.StatusBadRequest)
 	artist, locADate, err := data.GetData(id)
-	if err != nil {
-		errorHandler(w, http.StatusBadRequest)
-		return
-	}
-
+	logError(w, err, http.StatusBadRequest)
 	location, err := data.GetLocationById(id)
-
+	logError(w, err, http.StatusBadRequest)
 	coor := data.GetCoordinatesBatch(location)
-	if err != nil {
-		errorHandler(w, http.StatusBadRequest)
-		return
-	}
+	logError(w, err, http.StatusBadRequest)
 
 	tmp, err := template.ParseFiles("./ui/html/artist-page.html")
 	if err != nil {
@@ -127,10 +107,7 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = tmp.Execute(w, ans)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	logError(w, err, http.StatusInternalServerError)
 }
 
 func filter(w http.ResponseWriter, r *http.Request) {
