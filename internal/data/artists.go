@@ -14,8 +14,8 @@ type Artist struct {
 	Members      []string `json:"members"`
 	CreationDate int      `json:"creationDate"`
 	FirstAlbum   string   `json:"firstAlbum"`
-	Locations    string   `json:"locations"`
-	ConcertDates string   `json:"concertDates"`
+	Locations    string   `json:"-"`
+	ConcertDates string   `json:"-"`
 }
 
 func GetArtists() []Artist {

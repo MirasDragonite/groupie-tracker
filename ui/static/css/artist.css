@@ -54,6 +54,40 @@ line-height: normal;
 .Date:hover{
   color: #d4af66dc;
 }
+nav#example-2 {
+  border: 1px solid #DEE1E6;
+}
+
+nav#example-2 ul {
+  padding: 0;
+  margin: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+nav#example-2 ul li {
+  list-style: none;
+  margin-right: 15px;
+  padding: 7px 10px;
+}
+
+nav#example-2 ul li a {
+  text-decoration: none;
+  color: #737171;
+  font-weight: 700;
+  font-size: 16px;
+  -webkit-transition: 0.8s ease-in;
+  transition: 0.8s ease-in;
+}
+
+nav#example-2 ul li a:hover {
+  color: #5b5b5b;
+}
+
+nav#example-2 ul li:last-child {
+  margin-right: 0;
+}
 .Album{
   margin: 1;
   color: #C2C2C2;

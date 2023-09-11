@@ -17,7 +17,6 @@ func Start() {
 
 	mux.HandleFunc("/", home)
 	mux.HandleFunc("/artist/", getArtist)
-	mux.HandleFunc("/filtered", filter)
 
 	fmt.Printf("Server loading in http://localhost%v/\n", host)
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
@@ -108,61 +107,4 @@ func getArtist(w http.ResponseWriter, r *http.Request) {
 
 	err = tmp.Execute(w, ans)
 	logError(w, err, http.StatusInternalServerError)
-}
-
-func filter(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		errorHandler(w, http.StatusMethodNotAllowed)
-		return
-	}
-
-	if r.URL.Path != "/filtered" {
-		errorHandler(w, http.StatusNotFound)
-		return
-	}
-
-	locAndDate := data.GetLocationsAndDates()
-	search := data.GetArtists()
-	locations := data.GetLocations().Index
-	minCD, err := strconv.Atoi(r.FormValue("minValueCD"))
-	maXCD, err := strconv.Atoi(r.FormValue("maxValueCD"))
-	minFA, err := strconv.Atoi(r.FormValue("minValueFA"))
-	maxFA, err := strconv.Atoi(r.FormValue("maxValueFA"))
-	n1, err := strconv.Atoi(r.FormValue("member1"))
-	n2, err := strconv.Atoi(r.FormValue("member2"))
-	n3, err := strconv.Atoi(r.FormValue("member3"))
-	n4, err := strconv.Atoi(r.FormValue("member4"))
-	n5, err := strconv.Atoi(r.FormValue("member5"))
-	n6, err := strconv.Atoi(r.FormValue("member6"))
-	n7, err := strconv.Atoi(r.FormValue("member7"))
-	n8, err := strconv.Atoi(r.FormValue("member8"))
-	if err != nil {
-		errorHandler(w, http.StatusBadRequest)
-		return
-	}
-	numberOfMembers := make([]int, 0)
-	numberOfMembers = pkg.AddToSlice(numberOfMembers, n1, n2, n3, n4, n5, n6, n7, n8)
-
-	locationFromFilter := r.FormValue("locationFromFilter")
-	fmt.Println(numberOfMembers)
-	filtered := pkg.Filter(minCD, maXCD, minFA, maxFA, locationFromFilter, numberOfMembers)
-
-	tmp, err := template.ParseFiles("./ui/html/home.html")
-	if err != nil {
-		errorHandler(w, http.StatusInternalServerError)
-		return
-	}
-
-	ans := map[string]interface{}{
-		"Search":    search,
-		"Artists":   filtered,
-		"Locations": locations,
-		"Filters":   locAndDate.Items,
-	}
-
-	err = tmp.Execute(w, ans)
-	if err != nil {
-		errorHandler(w, http.StatusInternalServerError)
-		return
-	}
 }
